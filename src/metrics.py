@@ -1,5 +1,5 @@
 import numpy as np
-from config.constants import JUPITER_A, K1, K2, K3
+from constants import JUPITER_A, K1, K2, K3
 
 
 def get_secular_series(a):

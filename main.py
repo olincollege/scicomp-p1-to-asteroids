@@ -1,6 +1,6 @@
 from src.parser import load_astdys_prop
 from src.clustering import run_hcm_search
-from config.constants import HIRAYAMA_BENCHMARKS, V_CUTOFF
+from constants import HIRAYAMA_BENCHMARKS, V_CUTOFF
 
 
 def main():

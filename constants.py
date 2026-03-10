@@ -161,3 +161,22 @@ BACKGROUND_ALPHA = 0.15  # Alpha (transparency) for background asteroids
 FAMILY_ALPHA = 0.7  # Alpha for family members
 
 FAMILY_CMAP = "tab20"  # Colormap for families
+
+# CLUSTERING COLUMNS
+CLUSTERING_COLS = ["D_deg", "e_p", "sin_i_p"]
+
+# TROJAN PREPROCESSING FILTERS
+D_DEG_MIN = 0.5  # minimum libration amplitude [deg]
+D_DEG_MAX = 34.0  # maximum libration amplitude [deg]
+LYAPUNOV_MAX = 5  # max Lyapunov number — above this = chaotic
+
+TARGET_FAMILIES = {
+    "Eurybates": {"astdys_id": 3548},
+    "Arkesilaos": {"astdys_id": 11351},
+    "1996_RJ": {"astdys_id": 4709},
+    "Ennomos": {"astdys_id": 4035},
+    "Hektor": {"astdys_id": 624},
+    "Mele": {"astdys_id": 9430},
+    "Panthoos": {"astdys_id": 4060},
+    "Cloanthus": {"astdys_id": 9799},
+}

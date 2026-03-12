@@ -1,21 +1,3 @@
-"""
-constants.py
------------------------------
-File for the Physical and algorithmic constants for the Asteroid Families
-identification project, based on Zappalà and Hirayama Papers.
-
-Source References
-----------
-Zappalà, V., Cellino, A., Farinella, P., & Knezevic, Z. (1990).
-    Asteroid Families. I. Identification by Hierarchical Clustering and
-    Reliability Assessment. Astronomical Journal, 100, 2030.
-    DOI: 10.1086/115658
-
-Hirayama, K. (1919).
-    Groups of Asteroids Probably of Common Origin.
-    Astronomical Journal, 31, 185.
-"""
-
 # PHYSICAL CONSTANTS
 GM_SUN = 1.32712440018e20  # Gravitational parameter of the Sun [m^3 / s^2]
 

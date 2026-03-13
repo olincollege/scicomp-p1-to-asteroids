@@ -1,3 +1,4 @@
+# Importing in Needed Libraries and Files
 import numpy as np
 from scipy.spatial.distance import pdist, squareform
 from constants import K_A, K_E, K_I, GM_AU_DAY, AU_TO_KM, CLUSTERING_COLS
@@ -16,7 +17,16 @@ EPS = 50.0
 
 
 def zappala_distance(u, v):
-    """Zappalà velocity distance between two asteroids in m/s."""
+    """
+    Compute the Zappalà velocity distance between two asteroids.
+
+    Args:
+        u (array): For the first asteroid.
+        v (array): For the second asteroid.
+
+    Returns:
+        float: The velocity distance in m/s.
+    """
     da1, e1, s1 = u
     da2, e2, s2 = v
     return NA_MS * np.sqrt(
@@ -30,14 +40,12 @@ def compute_distance_matrix(syn):
     """
     Compute full pairwise Zappalà distance matrix.
 
-    Parameters
-    ----------
-    syn : pd.DataFrame with columns da_AU, e_p, sin_i_p
+    Args:
+        syn (pd.DataFrame): pd.DataFrame with columns da_AU, e_p, sin_i_p
 
-    Returns
-    -------
-    D : np.ndarray — square distance matrix in m/s
-    X : np.ndarray — feature matrix used
+    Returns:
+        D (array): Square distance matrix in m/s
+        X (array): Feature matrix used
     """
     print("\nStep 3: Computing Zappalà distance matrix")
     X = syn[CLUSTERING_COLS].to_numpy(dtype=np.float64)

@@ -10,21 +10,39 @@ from constants import TARGET_FAMILIES, COMPLETENESS_TARGET
 
 
 def evaluate(syn, labels, mem):
+    """
+    Evaluate clustering results against the AstDys ground truth membership. For each target
+    family, finds the best-matching cluster by maximum asteroid ID overlap, then computes
+    completeness and contamination:
+
+    Args:
+        syn (pd.DataFrame): Preprocessed proper elements DataFrame, indexed by asteroid_number.
+        labels (array): Cluster labels from DBSCAN. -1 indicates noise.
+        mem (pd.DataFrame): AstDys membership DataFrame, indexed by asteroid_number. Must contain
+                            column 'family1' with integer family IDs.
+
+    Returns:
+        results (pd.DataFrame): One row per target family with columns
+    """
+
     print("\nStep 5: Evaluating against AstDys ground truth")
     syn = syn.copy()
     syn["cluster"] = labels
 
     rows = []
     for fam_id in TARGET_FAMILIES:
+        # ground truth: AstDys members of this family that are also in syn
         gt_ids = set(mem[mem["family1"] == fam_id].index) & set(syn.index)
         n_astdys = len(gt_ids)
         if n_astdys == 0:
             continue
 
+        # find which cluster contains the most ground truth members
         gt_sub = syn.loc[syn.index.isin(gt_ids)]
         cc = gt_sub["cluster"].value_counts()
         cc = cc[cc.index != -1]
 
+        # if no cluster contains any ground truth members, family is missed entirely
         if cc.empty:
             rows.append(
                 {
@@ -38,6 +56,7 @@ def evaluate(syn, labels, mem):
             )
             continue
 
+        # best cluster = the one with the most AstDys members inside it
         best = cc.idxmax()
         cluster_ids = set(syn[syn["cluster"] == best].index)
         n_overlap = len(gt_ids & cluster_ids)
@@ -56,6 +75,7 @@ def evaluate(syn, labels, mem):
 
     results = pd.DataFrame(rows).sort_values("completeness", ascending=False)
 
+    # print benchmark summary
     passing = results[results["completeness"] >= COMPLETENESS_TARGET]
     print(f"\n{'='*60}")
     print("BENCHMARK RESULTS")

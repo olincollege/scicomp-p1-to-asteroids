@@ -1,3 +1,4 @@
+# Importing in Libraries needed and the files needed
 import os
 import numpy as np
 import pandas as pd
@@ -9,21 +10,36 @@ from constants import COMPLETENESS_TARGET
 
 
 def visualize(syn, labels, results, save_dir="results"):
+    """
+    Generate and save diagnostic plots for the clustering results.
+
+    Args:
+        syn (pd.DataFrame): Preprocessed proper elements DataFrame, indexed by asteroid_number.
+        labels : Cluster labels from DBSCAN.
+        results (pd.DataFrame): Evaluation results from evaluate().
+        save_dir (str): Directory to save plots into.
+
+    Returns:
+        None
+    """
     print("\nStep 6: Generating plots")
     os.makedirs(save_dir, exist_ok=True)
 
+    # assign a distinct color to each cluster ID
     family_ids = sorted([f for f in np.unique(labels) if f >= 0])
     cmap = cm.get_cmap("tab20")
     color_map = {
         fid: cmap(i / max(len(family_ids), 1)) for i, fid in enumerate(family_ids)
     }
 
+    # Plot 1: proper element scatter plots
     fig, axes = plt.subplots(1, 2, figsize=(14, 6))
     bg = labels == -1
 
     for ax, ycol, ylabel in zip(
         axes, ["e_p", "sin_i_p"], ["Proper Eccentricity $e_p$", r"$\sin(i_p)$"]
     ):
+        # background asteroids in grey
         ax.scatter(
             syn.loc[bg, "da_AU"],
             syn.loc[bg, ycol],
@@ -32,6 +48,8 @@ def visualize(syn, labels, results, save_dir="results"):
             alpha=0.1,
             label="Background",
         )
+
+        # overlay each family cluster in color
         for fid in family_ids[:20]:
             mask = labels == fid
             ax.scatter(
@@ -51,8 +69,10 @@ def visualize(syn, labels, results, save_dir="results"):
     print(f"  Saved proper_elements.png")
     plt.close()
 
-    # completeness bar chart
+    # Plot 2: completeness bar chart
     fig, ax = plt.subplots(figsize=(10, 5))
+
+    # color bars by whether they pass the 95% benchmark
     colors = [
         "steelblue" if c >= COMPLETENESS_TARGET else "salmon"
         for c in results["completeness"]
